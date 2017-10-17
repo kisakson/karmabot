@@ -25,6 +25,8 @@ module.exports = (robot) ->
             res += "@#{user}++ [woot! now at #{count}]\n"
          else if process.env.KARMABOT_NO_GIF
             res += process.env.KARMABOT_NO_GIF
+         else
+            res+= "Don't be selfish!\n"
      while (match = minusminus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          count = (robot.brain.get(user) or 0) - 1
@@ -79,7 +81,7 @@ module.exports = (robot) ->
   #     msg.reply "Opening #{doorType} doors"
   #
   robot.hear /I like pie/i, (msg) ->
-    msg.emote "makes a freshly baked pie"
+    msg.emote "*makes a freshly baked pie*"
   #
   # lulz = ['lol', 'rofl', 'lmao']
   #
@@ -162,4 +164,3 @@ module.exports = (robot) ->
   # robot.respond /sleep it off/i, (msg) ->
   #   robot.brain.set 'totalSodas', 0
   #   robot.respond 'zzzzz'
-  
