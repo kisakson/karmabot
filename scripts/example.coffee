@@ -20,7 +20,7 @@ module.exports = (robot) ->
      while (match = plusplus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          if user != sending_user
-            pluscount_re = /\+{2}/g
+            pluscount_re = /(?=(\+{2}))/g
             num_karma = 0
             while (match2 = pluscount_re.exec(match))
                 num_karma = num_karma + 1
@@ -35,7 +35,7 @@ module.exports = (robot) ->
      while (match = minusminus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          if user != sending_user
-            minuscount_re = /\-{2}/g
+            minuscount_re = /(?=(\-{2}))/g
             num_karma = 0
             while (match2 = minuscount_re.exec(match))
                 num_karma = num_karma + 1
@@ -49,7 +49,7 @@ module.exports = (robot) ->
             res += "@#{sending_user}, please be kind to yourself. :(\n"
      msg.send res.replace(/\s+$/g, '')
 
-  robot.hear /[@]?#{botname}[ ]+@([a-z0-9_\-\.]+)/i, (msg) ->
+  robot.hear /[@]?karmabot[ ]+@([a-z0-9_\-\.]+)/i, (msg) ->
      user = msg.match[1].replace(/\-+$/g, '')
      count = robot.brain.get(user)
      if count != null
@@ -58,7 +58,7 @@ module.exports = (robot) ->
      else
          msg.send "@#{user} has no karma"
 
-  robot.hear /[@]?#{botname}[ ]+leaderboard/i, (msg) ->
+  robot.hear /[@]?karmabot[ ]+leaderboard/i, (msg) ->
      users = robot.brain.data._private
      tuples = []
      for username, score of users
