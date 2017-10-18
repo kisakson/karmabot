@@ -20,19 +20,36 @@ module.exports = (robot) ->
      while (match = plusplus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          if user != sending_user
-            count = (robot.brain.get(user) or 0) + 1
+            pluscount_re = /++/g
+            num_karma = 0
+            while (match2 = pluscount_re.exec(match))
+                num_karma = num_karma + 1
+            count = (robot.brain.get(user) or 0) + Math.min(num_karma, 5)
             robot.brain.set user, count
-            res += "@#{user}++ [woot! now at #{count}]\n"
+            res += "@#{user}++ [woot! now at #{count}"
+            if (num_karma > 5)
+                res += " (Buzzkill Mode Activated!)"
+            res += "]\n"
          else
             res+= "Don't be selfish!\n"
      while (match = minusminus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
-         count = (robot.brain.get(user) or 0) - 1
-         robot.brain.set user, count
-         res += "@#{user}-- [ouch! now at #{count}]\n"
+         if user != sending_user
+            minuscount_re = /--/g
+            num_karma = 0
+            while (match2 = minuscount_re.exec(match))
+                num_karma = num_karma + 1
+            count = (robot.brain.get(user) or 0) - Math.min(num_karma, 5)
+            robot.brain.set user, count
+            res += "@#{user}-- [ouch! now at #{count}"
+            if (num_karma > 5)
+                res += " (Kindness Mode Activated!)"
+            res += "]\n"
+        else
+            res += "@#{sending_user}, please be kind to yourself. :(\n"
      msg.send res.replace(/\s+$/g, '')
 
-  robot.hear /#{botname}[ ]?@([a-z0-9_\-\.]+)/i, (msg) ->
+  robot.hear /[@]?#{botname}[ ]+@([a-z0-9_\-\.]+)/i, (msg) ->
      user = msg.match[1].replace(/\-+$/g, '')
      count = robot.brain.get(user)
      if count != null
@@ -41,7 +58,7 @@ module.exports = (robot) ->
      else
          msg.send "@#{user} has no karma"
 
-  robot.hear /#{botname}[ ]?leaderboard/i, (msg) ->
+  robot.hear /[@]?#{botname}[ ]+leaderboard/i, (msg) ->
      users = robot.brain.data._private
      tuples = []
      for username, score of users
