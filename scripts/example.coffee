@@ -20,7 +20,7 @@ module.exports = (robot) ->
      while (match = plusplus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          if user != sending_user
-            pluscount_re = /(?=(\+{2}))/g
+            pluscount_re = /(?=(\+{2}))\+/g
             num_karma = 0
             while (match2 = pluscount_re.exec(match))
                 num_karma = num_karma + 1
@@ -35,7 +35,7 @@ module.exports = (robot) ->
      while (match = minusminus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          if user != sending_user
-            minuscount_re = /(?=(\-{2}))/g
+            minuscount_re = /(?=(\-{2}))\-/g
             num_karma = 0
             while (match2 = minuscount_re.exec(match))
                 num_karma = num_karma + 1
