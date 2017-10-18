@@ -35,7 +35,7 @@ module.exports = (robot) ->
      while (match = minusminus_re.exec(msg.message))
          user = match[1].replace(/\-+$/g, '')
          if user != sending_user
-            minuscount_re = /--/g
+            minuscount_re = /\-{2}/g
             num_karma = 0
             while (match2 = minuscount_re.exec(match))
                 num_karma = num_karma + 1
@@ -45,7 +45,7 @@ module.exports = (robot) ->
             if (num_karma > 5)
                 res += " (Kindness Mode Activated!)"
             res += "]\n"
-        else
+         else
             res += "@#{sending_user}, please be kind to yourself. :(\n"
      msg.send res.replace(/\s+$/g, '')
 
